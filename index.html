@@ -2,8 +2,8 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>FAQ du Serveur</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ du Serveur</title>
 
 <style>
 * {
@@ -21,23 +21,20 @@ body {
 
 header {
     background: linear-gradient(135deg, #2563eb, #7c3aed);
-    padding: 50px 20px;
+    padding: 55px 20px;
     text-align: center;
 }
 
 header h1 {
     margin: 0;
     font-size: 42px;
-    font-weight: 700;
 }
 
 header p {
     margin-top: 10px;
-    opacity: 0.95;
     font-size: 16px;
+    opacity: 0.95;
 }
-
-/* SEARCH */
 
 .search-box {
     margin-top: 25px;
@@ -47,8 +44,8 @@ header p {
 
 #search {
     width: 100%;
-    max-width: 650px;
-    padding: 14px 18px;
+    max-width: 700px;
+    padding: 15px 18px;
     border: none;
     border-radius: 14px;
     font-size: 16px;
@@ -57,15 +54,15 @@ header p {
     color: #111827;
 }
 
-/* LAYOUT */
+/* CONTAINER */
 
 .container {
-    max-width: 950px;
+    max-width: 1000px;
     margin: auto;
     padding: 30px 20px;
 }
 
-/* ASK QUESTION CARD */
+/* ASK CARD */
 
 .ask-card {
     background: #111827;
@@ -80,11 +77,9 @@ header p {
 
 .ask-card h2 {
     margin-top: 0;
-    margin-bottom: 10px;
 }
 
 .ask-card p {
-    margin-top: 0;
     color: #94a3b8;
     font-size: 14px;
 }
@@ -125,14 +120,21 @@ button:hover {
     background: #4338ca;
 }
 
-/* FAQ */
+/* SECTIONS */
 
 .section-title {
-    margin-top: 40px;
+    margin-top: 45px;
     margin-bottom: 15px;
     font-size: 24px;
     font-weight: 700;
 }
+
+.section-subtitle {
+    color: #94a3b8;
+    margin-bottom: 15px;
+}
+
+/* FAQ ITEM */
 
 .faq-item {
     background: #111827;
@@ -157,15 +159,23 @@ button:hover {
     display: none;
     padding: 18px;
     border-top: 1px solid #1f2937;
-    color: #cbd5e1;
     line-height: 1.6;
+    color: #cbd5e1;
 }
 
-/* STATUS */
-
-.pending {
+.pending-answer {
     color: #facc15;
     font-style: italic;
+}
+
+/* EMPTY */
+
+.empty {
+    background: #111827;
+    border: 1px dashed #334155;
+    border-radius: 14px;
+    padding: 20px;
+    color: #94a3b8;
 }
 
 /* MOBILE */
@@ -199,15 +209,16 @@ button:hover {
 
 <div class="container">
 
-    <!-- QUESTION FORM -->
+    <!-- POSER UNE QUESTION -->
+
     <div class="ask-card">
         <h2>❓ Poser une question</h2>
         <p>
-            Si la réponse n’existe pas encore, pose ta question ici.
-            Elle sera ajoutée automatiquement avec le statut "en attente".
+            Si la réponse n’existe pas encore, ta question sera envoyée par email
+            et ajoutée automatiquement dans la FAQ avec le statut <b>en attente</b>.
         </p>
 
-        <form id="formspreeForm">
+        <form id="questionForm">
             <input
                 id="questionInput"
                 type="text"
@@ -226,12 +237,29 @@ button:hover {
         </form>
     </div>
 
-    <!-- FAQ LIST -->
+    <!-- QUESTIONS EN ATTENTE -->
+
     <div class="section-title">
-        Questions existantes
+        ⏳ Questions en attente
     </div>
 
-    <div id="faq"></div>
+    <div class="section-subtitle">
+        Questions posées récemment, en attente de réponse.
+    </div>
+
+    <div id="pendingFaq"></div>
+
+    <!-- QUESTIONS RÉPONDUES -->
+
+    <div class="section-title">
+        ✅ Questions répondues
+    </div>
+
+    <div class="section-subtitle">
+        Réponses déjà disponibles dans la FAQ.
+    </div>
+
+    <div id="answeredFaq"></div>
 
 </div>
 
@@ -251,60 +279,108 @@ const PATH = "faq.json";
 const BRANCH = "main";
 
 /* =========================
-   FAQ DATA
+   DATA
 ========================= */
 
 let faqData = [];
 
 /* =========================
-   LOAD FAQ
+   LOAD FAQ (ANTI CACHE)
 ========================= */
 
 async function loadFAQ() {
     try {
-        const res = await fetch("./faq.json");
+        const timestamp = new Date().getTime();
+
+        const res = await fetch(`./faq.json?v=${timestamp}`, {
+            cache: "no-store"
+        });
+
+        if (!res.ok) {
+            throw new Error("Impossible de charger faq.json");
+        }
+
         faqData = await res.json();
+
+        /* dernières questions en premier */
+        faqData.reverse();
+
         render(faqData);
+
     } catch (error) {
         console.error(error);
-        document.getElementById("faq").innerHTML =
-            "<p>Impossible de charger la FAQ.</p>";
+
+        document.getElementById("pendingFaq").innerHTML =
+            `<div class="empty">Impossible de charger la FAQ.</div>`;
+
+        document.getElementById("answeredFaq").innerHTML = "";
     }
 }
 
 /* =========================
-   RENDER FAQ
+   RENDER
 ========================= */
 
 function render(data) {
-    const container = document.getElementById("faq");
-    container.innerHTML = "";
+    const pendingContainer = document.getElementById("pendingFaq");
+    const answeredContainer = document.getElementById("answeredFaq");
 
-    if (data.length === 0) {
-        container.innerHTML = "<p>Aucun résultat trouvé.</p>";
+    pendingContainer.innerHTML = "";
+    answeredContainer.innerHTML = "";
+
+    const pending = data.filter(item =>
+        item.answer &&
+        item.answer.toLowerCase() === "en attente"
+    );
+
+    const answered = data.filter(item =>
+        !item.answer ||
+        item.answer.toLowerCase() !== "en attente"
+    );
+
+    renderSection(
+        pending,
+        pendingContainer,
+        true
+    );
+
+    renderSection(
+        answered,
+        answeredContainer,
+        false
+    );
+}
+
+function renderSection(list, container, isPending) {
+    if (list.length === 0) {
+        container.innerHTML = `
+            <div class="empty">
+                Aucun élément ici pour le moment.
+            </div>
+        `;
         return;
     }
 
-    data.forEach((item, index) => {
+    list.forEach((item, index) => {
         const div = document.createElement("div");
         div.className = "faq-item";
 
-        const answerClass =
-            item.answer.toLowerCase() === "en attente"
-                ? "answer pending"
-                : "answer";
+        const answerClass = isPending
+            ? "answer pending-answer"
+            : "answer";
 
         div.innerHTML = `
             <div class="question">
-                ${index + 1}. ${item.question}
+                ${item.question}
             </div>
             <div class="${answerClass}">
-                ${item.answer}
+                ${item.answer || "Aucune réponse"}
             </div>
         `;
 
         div.querySelector(".question").addEventListener("click", () => {
             const answer = div.querySelector(".answer");
+
             answer.style.display =
                 answer.style.display === "block"
                     ? "none"
@@ -320,11 +396,16 @@ function render(data) {
 ========================= */
 
 document.getElementById("search").addEventListener("input", (e) => {
-    const value = e.target.value.toLowerCase();
+    const value = e.target.value.toLowerCase().trim();
+
+    if (!value) {
+        render(faqData);
+        return;
+    }
 
     const filtered = faqData.filter(item =>
-        item.question.toLowerCase().includes(value) ||
-        item.answer.toLowerCase().includes(value) ||
+        (item.question || "").toLowerCase().includes(value) ||
+        (item.answer || "").toLowerCase().includes(value) ||
         (item.category || "").toLowerCase().includes(value)
     );
 
@@ -332,12 +413,13 @@ document.getElementById("search").addEventListener("input", (e) => {
 });
 
 /* =========================
-   ADD TO GITHUB JSON
+   ADD TO GITHUB
 ========================= */
 
 async function addToGithub(question) {
     const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
 
+    /* GET FILE */
     const getRes = await fetch(url, {
         method: "GET",
         headers: {
@@ -346,18 +428,24 @@ async function addToGithub(question) {
         }
     });
 
+    if (!getRes.ok) {
+        throw new Error("Impossible de lire faq.json");
+    }
+
     const file = await getRes.json();
 
     const cleanContent = file.content.replace(/\n/g, "");
     const decoded = atob(cleanContent);
     const json = JSON.parse(decoded);
 
+    /* ADD QUESTION */
     json.push({
         category: "Utilisateur",
         question: question,
         answer: "en attente"
     });
 
+    /* REENCODE */
     const updatedContent = btoa(
         unescape(
             encodeURIComponent(
@@ -366,7 +454,8 @@ async function addToGithub(question) {
         )
     );
 
-    await fetch(url, {
+    /* PUT FILE */
+    const putRes = await fetch(url, {
         method: "PUT",
         headers: {
             Authorization: `token ${TOKEN}`,
@@ -380,13 +469,17 @@ async function addToGithub(question) {
             branch: BRANCH
         })
     });
+
+    if (!putRes.ok) {
+        throw new Error("Impossible d'écrire dans faq.json");
+    }
 }
 
 /* =========================
    FORM SUBMIT
 ========================= */
 
-document.getElementById("formspreeForm").addEventListener("submit", async (e) => {
+document.getElementById("questionForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const question = document.getElementById("questionInput").value.trim();
@@ -395,7 +488,7 @@ document.getElementById("formspreeForm").addEventListener("submit", async (e) =>
     if (!question) return;
 
     try {
-        /* Formspree */
+        /* FORMSpree EMAIL */
         await fetch("https://formspree.io/f/mdaybojz", {
             method: "POST",
             headers: {
@@ -407,7 +500,7 @@ document.getElementById("formspreeForm").addEventListener("submit", async (e) =>
             })
         });
 
-        /* GitHub JSON */
+        /* GITHUB UPDATE */
         await addToGithub(question);
 
         alert("Question envoyée avec succès !");
@@ -415,7 +508,10 @@ document.getElementById("formspreeForm").addEventListener("submit", async (e) =>
         document.getElementById("questionInput").value = "";
         document.getElementById("detailsInput").value = "";
 
-        loadFAQ();
+        /* attendre GitHub Pages */
+        setTimeout(() => {
+            loadFAQ();
+        }, 3000);
 
     } catch (error) {
         console.error(error);
