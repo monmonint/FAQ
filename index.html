@@ -9,55 +9,70 @@
 body {
     margin: 0;
     font-family: system-ui;
-    background: #0b1220;
+    background: #0a0f1e;
     color: #e2e8f0;
 }
 
+/* HEADER */
 header {
-    padding: 40px;
+    padding: 50px 20px;
     text-align: center;
-    background: linear-gradient(135deg,#3b82f6,#8b5cf6);
+    background: linear-gradient(135deg,#2563eb,#7c3aed);
 }
 
 header h1 {
     margin: 0;
-    font-size: 38px;
+    font-size: 42px;
 }
 
 header input {
     margin-top: 15px;
-    padding: 12px;
+    padding: 14px;
     width: 60%;
-    border-radius: 10px;
+    border-radius: 12px;
     border: none;
+    outline: none;
+    font-size: 16px;
 }
 
+/* LAYOUT */
 .container {
     max-width: 900px;
     margin: auto;
     padding: 25px;
 }
 
+/* CATEGORY */
 .category {
     margin-top: 35px;
-    font-size: 20px;
+    font-size: 18px;
     border-left: 4px solid #6366f1;
     padding-left: 10px;
+    opacity: 0.9;
 }
 
+/* ITEM */
 .item {
     background: #111a2e;
     margin-top: 10px;
     border-radius: 12px;
+    overflow: hidden;
+    transition: 0.2s;
+}
+
+.item:hover {
+    transform: translateY(-2px);
 }
 
 .q {
     padding: 15px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 600;
 }
 
-.q:hover { background:#1e2a44; }
+.q:hover {
+    background: #1e2a44;
+}
 
 .a {
     display: none;
@@ -66,37 +81,26 @@ header input {
     color: #cbd5e1;
 }
 
-form {
-    margin-top: 60px;
+/* SUGGESTIONS */
+.suggestions {
+    margin-top: 10px;
+    text-align: left;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.suggestion {
     background: #111a2e;
-    padding: 20px;
-    border-radius: 12px;
-}
-
-input, textarea {
-    width: 100%;
-    margin-top: 10px;
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
-    background: #0b1220;
-    color: white;
-}
-
-button {
-    margin-top: 10px;
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    background: #6366f1;
-    color: white;
-    font-weight: bold;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 8px;
     cursor: pointer;
+    font-size: 14px;
 }
 
-button:hover {
-    background: #4f46e5;
+.suggestion:hover {
+    background: #1e2a44;
 }
 </style>
 </head>
@@ -105,33 +109,22 @@ button:hover {
 
 <header>
 <h1>📘 FAQ du Serveur</h1>
-<input id="search" placeholder="Rechercher...">
+<input id="search" placeholder="Rechercher une question...">
+<div class="suggestions" id="suggestions"></div>
 </header>
 
 <div class="container" id="faq"></div>
-
-<div class="container">
-
-<h2>❓ Poser une question</h2>
-
-<form action="https://formspree.io/f/mdaybojz" method="POST">
-    <input name="question" type="text" placeholder="Ta question" required>
-    <textarea name="details" placeholder="Détails (optionnel)"></textarea>
-    <button type="submit">Envoyer</button>
-</form>
-
-</div>
 
 <script>
 
 let data = [];
 
-/* LOAD FAQ */
+/* LOAD JSON */
 fetch("./faq.json")
 .then(r => r.json())
 .then(json => {
     data = json;
-    render(json);
+    render(data);
 });
 
 /* RENDER */
@@ -171,17 +164,59 @@ function render(list) {
     }
 }
 
-/* SEARCH */
-document.getElementById("search").addEventListener("input", e => {
-    const v = e.target.value.toLowerCase();
+/* 🔍 SMART SEARCH */
+function scoreMatch(text, query) {
+    const words = query.toLowerCase().split(" ");
+    let score = 0;
 
-    const filtered = data.filter(x =>
-        x.question.toLowerCase().includes(v) ||
-        x.answer.toLowerCase().includes(v) ||
-        x.category.toLowerCase().includes(v)
-    );
+    for (let w of words) {
+        if (text.includes(w)) score += 2;
+        else if (text.split(" ").some(t => t.startsWith(w))) score += 1;
+    }
+
+    return score;
+}
+
+/* INPUT SEARCH */
+document.getElementById("search").addEventListener("input", e => {
+    const value = e.target.value.toLowerCase();
+    const suggestionsBox = document.getElementById("suggestions");
+
+    if (!value) {
+        render(data);
+        suggestionsBox.innerHTML = "";
+        return;
+    }
+
+    let scored = data.map(item => {
+        let text = (item.question + " " + item.answer + " " + item.category).toLowerCase();
+        return { item, score: scoreMatch(text, value) };
+    });
+
+    scored = scored
+        .filter(x => x.score > 0)
+        .sort((a, b) => b.score - a.score);
+
+    const filtered = scored.map(x => x.item);
 
     render(filtered);
+
+    /* 🔥 suggestions */
+    suggestionsBox.innerHTML = "";
+
+    scored.slice(0, 5).forEach(x => {
+        const div = document.createElement("div");
+        div.className = "suggestion";
+        div.innerText = x.item.question;
+
+        div.onclick = () => {
+            document.getElementById("search").value = x.item.question;
+            render([x.item]);
+            suggestionsBox.innerHTML = "";
+        };
+
+        suggestionsBox.appendChild(div);
+    });
 });
 
 </script>
