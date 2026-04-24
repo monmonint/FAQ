@@ -3,38 +3,146 @@
 <head>
 <meta charset="UTF-8">
 <title>FAQ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-body { font-family: Arial; max-width: 800px; margin: auto; padding: 40px; }
-h1 { text-align: center; }
-.faq { margin-top: 20px; }
-.question { font-weight: bold; cursor: pointer; margin-top: 15px; }
-.answer { display: none; margin-top: 5px; color: #444; }
+body {
+    font-family: system-ui, Arial;
+    margin: 0;
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+header {
+    padding: 40px;
+    text-align: center;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 40px;
+}
+
+header input {
+    margin-top: 20px;
+    padding: 12px;
+    width: 60%;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 30px;
+}
+
+.category {
+    margin-top: 40px;
+    font-size: 22px;
+    border-left: 4px solid #6366f1;
+    padding-left: 10px;
+}
+
+.faq-item {
+    background: #1e293b;
+    margin-top: 12px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.question {
+    padding: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+}
+
+.question:hover {
+    background: #334155;
+}
+
+.answer {
+    display: none;
+    padding: 15px;
+    color: #cbd5e1;
+    border-top: 1px solid #334155;
+}
+
+.badge {
+    font-size: 12px;
+    background: #6366f1;
+    padding: 3px 8px;
+    border-radius: 999px;
+}
 </style>
 </head>
 
 <body>
 
-<h1>FAQ</h1>
+<header>
+    <h1>📘 FAQ du Serveur</h1>
+    <input id="search" placeholder="Rechercher une question...">
+</header>
 
-<div class="faq">
+<div class="container">
 
-<div class="item">
-<div class="question">Comment accéder au serveur ?</div>
-<div class="answer">Tu dois te connecter via ton compte invité ou invité permanent.</div>
+<!-- CATÉGORIE 1 -->
+<div class="category">🔐 Compte</div>
+
+<div class="faq-item">
+<div class="question">Comment accéder au serveur ? <span class="badge">Compte</span></div>
+<div class="answer">Tu dois utiliser ton identifiant fourni par l’admin ou t’inscrire via le système d’invitation.</div>
 </div>
 
-<div class="item">
+<div class="faq-item">
+<div class="question">J’ai oublié mon mot de passe</div>
+<div class="answer">Contacte l’administrateur pour réinitialiser ton accès.</div>
+</div>
+
+<!-- CATÉGORIE 2 -->
+<div class="category">🖥️ Serveur</div>
+
+<div class="faq-item">
+<div class="question">Le serveur est lent, que faire ?</div>
+<div class="answer">Vérifie ta connexion puis contacte le support si le problème persiste.</div>
+</div>
+
+<div class="faq-item">
 <div class="question">Comment signaler un bug ?</div>
-<div class="answer">Contacte l’admin via Discord ou email.</div>
+<div class="answer">Envoie une description précise au support avec capture si possible.</div>
+</div>
+
+<!-- CATÉGORIE 3 -->
+<div class="category">📺 Contenu</div>
+
+<div class="faq-item">
+<div class="question">Comment ajouter un film ?</div>
+<div class="answer">Les uploads sont réservés aux administrateurs du serveur.</div>
 </div>
 
 </div>
 
 <script>
+// Accordion
 document.querySelectorAll(".question").forEach(q => {
     q.addEventListener("click", () => {
         const ans = q.nextElementSibling;
         ans.style.display = ans.style.display === "block" ? "none" : "block";
+    });
+});
+
+// Search
+const search = document.getElementById("search");
+search.addEventListener("input", () => {
+    const val = search.value.toLowerCase();
+
+    document.querySelectorAll(".faq-item").forEach(item => {
+        const text = item.innerText.toLowerCase();
+        item.style.display = text.includes(val) ? "block" : "none";
     });
 });
 </script>
