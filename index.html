@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>FAQ</title>
+<style>
+body { font-family: Arial; max-width: 800px; margin: auto; padding: 40px; }
+h1 { text-align: center; }
+.faq { margin-top: 20px; }
+.question { font-weight: bold; cursor: pointer; margin-top: 15px; }
+.answer { display: none; margin-top: 5px; color: #444; }
+</style>
+</head>
+
+<body>
+
+<h1>FAQ</h1>
+
+<div class="faq">
+
+<div class="item">
+<div class="question">Comment accéder au serveur ?</div>
+<div class="answer">Tu dois te connecter via ton compte invité ou invité permanent.</div>
+</div>
+
+<div class="item">
+<div class="question">Comment signaler un bug ?</div>
+<div class="answer">Contacte l’admin via Discord ou email.</div>
+</div>
+
+</div>
+
+<script>
+document.querySelectorAll(".question").forEach(q => {
+    q.addEventListener("click", () => {
+        const ans = q.nextElementSibling;
+        ans.style.display = ans.style.display === "block" ? "none" : "block";
+    });
+});
+</script>
+
+</body>
+</html>
