@@ -12,133 +12,80 @@
 
 body {
     margin: 0;
-    font-family: system-ui, Arial, sans-serif;
-    background: #0f172a;
-    color: #e2e8f0;
+    font-family: Inter, system-ui, Arial, sans-serif;
+    background: #f8fafc;
+    color: #0f172a;
 }
 
 /* HEADER */
 
 header {
-    background: linear-gradient(135deg, #2563eb, #7c3aed);
-    padding: 55px 20px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 40px 20px;
     text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 20;
 }
 
 header h1 {
     margin: 0;
-    font-size: 42px;
+    font-size: 34px;
+    font-weight: 700;
 }
 
 header p {
-    margin-top: 10px;
-    font-size: 16px;
-    opacity: 0.95;
+    margin-top: 8px;
+    color: #64748b;
+    font-size: 15px;
 }
 
 .search-box {
-    margin-top: 25px;
+    margin-top: 22px;
     display: flex;
     justify-content: center;
 }
 
 #search {
     width: 100%;
-    max-width: 700px;
-    padding: 15px 18px;
-    border: none;
-    border-radius: 14px;
-    font-size: 16px;
+    max-width: 720px;
+    padding: 14px 18px;
+    border: 1px solid #dbeafe;
+    border-radius: 12px;
+    font-size: 15px;
+    background: #ffffff;
     outline: none;
-    background: white;
-    color: #111827;
 }
 
-/* CONTAINER */
+/* LAYOUT */
 
 .container {
     max-width: 1000px;
     margin: auto;
-    padding: 30px 20px;
+    padding: 32px 20px 80px;
 }
 
-/* ASK CARD */
-
-.ask-card {
-    background: #111827;
-    border: 1px solid #1f2937;
-    border-radius: 18px;
-    padding: 24px;
-    margin-top: -40px;
-    position: relative;
-    z-index: 2;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-}
-
-.ask-card h2 {
-    margin-top: 0;
-}
-
-.ask-card p {
-    color: #94a3b8;
-    font-size: 14px;
-}
-
-input,
-textarea {
-    width: 100%;
-    margin-top: 12px;
-    padding: 14px;
-    border: 1px solid #334155;
-    border-radius: 12px;
-    background: #0f172a;
-    color: white;
-    font-size: 15px;
-    outline: none;
-}
-
-textarea {
-    min-height: 120px;
-    resize: vertical;
-}
-
-button {
-    width: 100%;
-    margin-top: 14px;
-    padding: 14px;
-    border: none;
-    border-radius: 12px;
-    background: #4f46e5;
-    color: white;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-button:hover {
-    background: #4338ca;
-}
-
-/* SECTIONS */
+/* SECTION */
 
 .section-title {
-    margin-top: 45px;
-    margin-bottom: 15px;
     font-size: 24px;
     font-weight: 700;
+    margin-top: 35px;
+    margin-bottom: 8px;
 }
 
 .section-subtitle {
-    color: #94a3b8;
-    margin-bottom: 15px;
+    color: #64748b;
+    margin-bottom: 18px;
+    font-size: 14px;
 }
 
-/* FAQ ITEM */
+/* FAQ */
 
 .faq-item {
-    background: #111827;
-    border: 1px solid #1f2937;
+    background: white;
+    border: 1px solid #e2e8f0;
     border-radius: 14px;
     margin-bottom: 12px;
     overflow: hidden;
@@ -152,41 +99,163 @@ button:hover {
 }
 
 .question:hover {
-    background: #1e293b;
+    background: #f8fafc;
 }
 
 .answer {
     display: none;
     padding: 18px;
-    border-top: 1px solid #1f2937;
+    border-top: 1px solid #e2e8f0;
+    color: #475569;
     line-height: 1.6;
-    color: #cbd5e1;
 }
 
 .pending-answer {
-    color: #facc15;
+    color: #b45309;
     font-style: italic;
 }
 
-/* EMPTY */
-
 .empty {
-    background: #111827;
-    border: 1px dashed #334155;
+    background: white;
+    border: 1px dashed #cbd5e1;
     border-radius: 14px;
-    padding: 20px;
-    color: #94a3b8;
+    padding: 18px;
+    color: #64748b;
+}
+
+/* FLOAT BUTTON */
+
+.ask-button {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 100;
+    background: #1e293b;
+    color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 16px 22px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    width: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+.ask-button:hover {
+    background: #0f172a;
+}
+
+/* SIDEBAR FORM */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -460px;
+    width: 420px;
+    max-width: 90%;
+    height: 100%;
+    background: white;
+    border-left: 1px solid #e2e8f0;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.08);
+    z-index: 200;
+    transition: 0.3s ease;
+    padding: 28px;
+    overflow-y: auto;
+}
+
+.sidebar.open {
+    right: 0;
+}
+
+.sidebar h2 {
+    margin-top: 0;
+    font-size: 26px;
+}
+
+.sidebar p {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.close-btn {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    width: auto;
+    padding: 0;
+    color: #475569;
+}
+
+input,
+textarea {
+    width: 100%;
+    margin-top: 12px;
+    padding: 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    background: white;
+    color: #0f172a;
+    font-size: 15px;
+    outline: none;
+}
+
+textarea {
+    min-height: 130px;
+    resize: vertical;
+}
+
+.submit-btn {
+    width: 100%;
+    margin-top: 14px;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: #2563eb;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background: #1d4ed8;
+}
+
+/* OVERLAY */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.35);
+    z-index: 150;
+    display: none;
+}
+
+.overlay.show {
+    display: block;
 }
 
 /* MOBILE */
 
 @media (max-width: 768px) {
     header h1 {
-        font-size: 32px;
+        font-size: 28px;
     }
 
-    .ask-card {
-        margin-top: -20px;
+    .ask-button {
+        right: 16px;
+        bottom: 16px;
+    }
+
+    .sidebar {
+        width: 100%;
+        max-width: 100%;
+        right: -100%;
     }
 }
 </style>
@@ -195,8 +264,8 @@ button:hover {
 <body>
 
 <header>
-    <h1>📘 FAQ du Serveur</h1>
-    <p>Trouve rapidement une réponse ou pose une nouvelle question</p>
+    <h1>FAQ du Serveur</h1>
+    <p>Rechercher une réponse ou poser une nouvelle question</p>
 
     <div class="search-box">
         <input
@@ -209,64 +278,70 @@ button:hover {
 
 <div class="container">
 
-    <!-- POSER UNE QUESTION -->
-
-    <div class="ask-card">
-        <h2>❓ Poser une question</h2>
-        <p>
-            Si la réponse n’existe pas encore, ta question sera envoyée par email
-            et ajoutée automatiquement dans la FAQ avec le statut <b>en attente</b>.
-        </p>
-
-        <form id="questionForm">
-            <input
-                id="questionInput"
-                type="text"
-                placeholder="Ex : Comment ajouter un nouveau film ?"
-                required
-            >
-
-            <textarea
-                id="detailsInput"
-                placeholder="Ajoute ici des détails si besoin..."
-            ></textarea>
-
-            <button type="submit">
-                Envoyer la question
-            </button>
-        </form>
-    </div>
-
-    <!-- QUESTIONS EN ATTENTE -->
-
     <div class="section-title">
-        ⏳ Questions en attente
+        Questions en attente
     </div>
-
     <div class="section-subtitle">
-        Questions posées récemment, en attente de réponse.
+        Questions récemment posées, en attente de réponse.
     </div>
-
     <div id="pendingFaq"></div>
 
-    <!-- QUESTIONS RÉPONDUES -->
-
     <div class="section-title">
-        ✅ Questions répondues
+        Questions répondues
     </div>
-
     <div class="section-subtitle">
         Réponses déjà disponibles dans la FAQ.
     </div>
-
     <div id="answeredFaq"></div>
 
+</div>
+
+<!-- FLOAT BUTTON -->
+
+<button class="ask-button" id="openSidebar">
+    + Poser une question
+</button>
+
+<!-- OVERLAY -->
+
+<div class="overlay" id="overlay"></div>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar" id="sidebar">
+    <button class="close-btn" id="closeSidebar">×</button>
+
+    <h2>Poser une question</h2>
+
+    <p>
+        Si la réponse n’existe pas encore, la question sera envoyée
+        par email et ajoutée automatiquement dans la FAQ avec le statut
+        <strong>en attente</strong>.
+    </p>
+
+    <form id="questionForm">
+        <input
+            id="questionInput"
+            type="text"
+            placeholder="Votre question"
+            required
+        >
+
+        <textarea
+            id="detailsInput"
+            placeholder="Ajouter des détails si nécessaire..."
+        ></textarea>
+
+        <button class="submit-btn" type="submit">
+            Envoyer la question
+        </button>
+    </form>
 </div>
 
 <script>
 
 /* =========================
-   CONFIG
+CONFIG
 ========================= */
 
 const PART1 = "github_pat_11BVBQR4Y0KUGzpGsTZmmk_QpEL1l8v"; 
@@ -279,13 +354,33 @@ const PATH = "faq.json";
 const BRANCH = "main";
 
 /* =========================
-   DATA
+DATA
 ========================= */
 
 let faqData = [];
 
 /* =========================
-   LOAD FAQ (ANTI CACHE)
+SIDEBAR
+========================= */
+
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("overlay");
+
+document.getElementById("openSidebar").addEventListener("click", () => {
+    sidebar.classList.add("open");
+    overlay.classList.add("show");
+});
+
+document.getElementById("closeSidebar").addEventListener("click", closeSidebar);
+overlay.addEventListener("click", closeSidebar);
+
+function closeSidebar() {
+    sidebar.classList.remove("open");
+    overlay.classList.remove("show");
+}
+
+/* =========================
+LOAD FAQ
 ========================= */
 
 async function loadFAQ() {
@@ -301,8 +396,6 @@ async function loadFAQ() {
         }
 
         faqData = await res.json();
-
-        /* dernières questions en premier */
         faqData.reverse();
 
         render(faqData);
@@ -318,7 +411,7 @@ async function loadFAQ() {
 }
 
 /* =========================
-   RENDER
+RENDER
 ========================= */
 
 function render(data) {
@@ -338,17 +431,8 @@ function render(data) {
         item.answer.toLowerCase() !== "en attente"
     );
 
-    renderSection(
-        pending,
-        pendingContainer,
-        true
-    );
-
-    renderSection(
-        answered,
-        answeredContainer,
-        false
-    );
+    renderSection(pending, pendingContainer, true);
+    renderSection(answered, answeredContainer, false);
 }
 
 function renderSection(list, container, isPending) {
@@ -361,7 +445,7 @@ function renderSection(list, container, isPending) {
         return;
     }
 
-    list.forEach((item, index) => {
+    list.forEach(item => {
         const div = document.createElement("div");
         div.className = "faq-item";
 
@@ -370,9 +454,7 @@ function renderSection(list, container, isPending) {
             : "answer";
 
         div.innerHTML = `
-            <div class="question">
-                ${item.question}
-            </div>
+            <div class="question">${item.question}</div>
             <div class="${answerClass}">
                 ${item.answer || "Aucune réponse"}
             </div>
@@ -392,7 +474,7 @@ function renderSection(list, container, isPending) {
 }
 
 /* =========================
-   SEARCH
+SEARCH
 ========================= */
 
 document.getElementById("search").addEventListener("input", (e) => {
@@ -413,13 +495,12 @@ document.getElementById("search").addEventListener("input", (e) => {
 });
 
 /* =========================
-   ADD TO GITHUB
+ADD TO GITHUB
 ========================= */
 
 async function addToGithub(question) {
     const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
 
-    /* GET FILE */
     const getRes = await fetch(url, {
         method: "GET",
         headers: {
@@ -438,14 +519,12 @@ async function addToGithub(question) {
     const decoded = atob(cleanContent);
     const json = JSON.parse(decoded);
 
-    /* ADD QUESTION */
     json.push({
         category: "Utilisateur",
         question: question,
         answer: "en attente"
     });
 
-    /* REENCODE */
     const updatedContent = btoa(
         unescape(
             encodeURIComponent(
@@ -454,7 +533,6 @@ async function addToGithub(question) {
         )
     );
 
-    /* PUT FILE */
     const putRes = await fetch(url, {
         method: "PUT",
         headers: {
@@ -476,7 +554,7 @@ async function addToGithub(question) {
 }
 
 /* =========================
-   FORM SUBMIT
+FORM SUBMIT
 ========================= */
 
 document.getElementById("questionForm").addEventListener("submit", async (e) => {
@@ -488,7 +566,6 @@ document.getElementById("questionForm").addEventListener("submit", async (e) => 
     if (!question) return;
 
     try {
-        /* FORMSpree EMAIL */
         await fetch("https://formspree.io/f/mdaybojz", {
             method: "POST",
             headers: {
@@ -500,7 +577,6 @@ document.getElementById("questionForm").addEventListener("submit", async (e) => 
             })
         });
 
-        /* GITHUB UPDATE */
         await addToGithub(question);
 
         alert("Question envoyée avec succès !");
@@ -508,7 +584,8 @@ document.getElementById("questionForm").addEventListener("submit", async (e) => 
         document.getElementById("questionInput").value = "";
         document.getElementById("detailsInput").value = "";
 
-        /* attendre GitHub Pages */
+        closeSidebar();
+
         setTimeout(() => {
             loadFAQ();
         }, 3000);
