@@ -22,7 +22,7 @@ body {
 header {
     background: white;
     border-bottom: 1px solid #e2e8f0;
-    padding: 30px 20px;
+    padding: 20px 20px;
     text-align: center;
     position: sticky;
     top: 0;
@@ -265,7 +265,7 @@ textarea {
 
 <header>
     <h1>FAQ du Serveur</h1>
-    <p>Rechercher une réponse ou poser une nouvelle question</p>
+   
 
     <div class="search-box">
         <input
@@ -314,8 +314,8 @@ textarea {
     <h2>Poser une question</h2>
 
     <p>
-        Si la réponse n’existe pas encore, la question sera envoyée
-        par email et ajoutée automatiquement dans la FAQ avec le statut
+        Vérifiez bien que la réponse n'est pas déjà présente ! 
+        On vous répondra au plus vite sur cette même FAQ !
         <strong>en attente</strong>.
     </p>
 
@@ -329,7 +329,7 @@ textarea {
 
         <textarea
             id="detailsInput"
-            placeholder="Ajouter des détails si nécessaire..."
+            placeholder="Qui pose la question"
         ></textarea>
 
         <button class="submit-btn" type="submit">
@@ -579,7 +579,11 @@ document.getElementById("questionForm").addEventListener("submit", async (e) => 
 
         await addToGithub(question);
 
-        alert("Question envoyée avec succès !");
+        alert(
+"Question envoyée avec succès !\n\n" +
+"On y répond au plus vite !\n" +
+"Elle apparaitra comme en attente dans quelques minutes"
+);
 
         document.getElementById("questionInput").value = "";
         document.getElementById("detailsInput").value = "";
