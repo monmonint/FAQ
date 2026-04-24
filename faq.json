@@ -1,13 +1,13 @@
 [
   {
     "category": "Compte",
-    "question": "Comment accÃ©der au serveur ?",
-    "answer": "Utilise ton compte invitÃ© ou lâinvitation fournie par lâadmin."
+    "question": "Comment accÃÂ©der au serveur ?",
+    "answer": "Utilise ton compte invitÃÂ© ou lÃ¢ÂÂinvitation fournie par lÃ¢ÂÂadmin."
   },
   {
     "category": "Serveur",
     "question": "Le serveur est lent, que faire ?",
-    "answer": "VÃ©rifie ta connexion ou contacte le support si le problÃ¨me persiste."
+    "answer": "VÃÂ©rifie ta connexion ou contacte le support si le problÃÂ¨me persiste."
   },
   {
     "category": "Contenu",
@@ -22,6 +22,11 @@
   {
     "category": "Utilisateur",
     "question": "test",
+    "answer": "en attente"
+  },
+  {
+    "category": "Utilisateur",
+    "question": "ajout",
     "answer": "en attente"
   }
 ]
