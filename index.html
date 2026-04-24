@@ -7,76 +7,96 @@
 
 <style>
 body {
-    font-family: system-ui, Arial;
     margin: 0;
-    background: #0f172a;
+    font-family: system-ui;
+    background: #0b1220;
     color: #e2e8f0;
 }
 
 header {
     padding: 40px;
     text-align: center;
-    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    background: linear-gradient(135deg,#3b82f6,#8b5cf6);
 }
 
 header h1 {
     margin: 0;
-    font-size: 40px;
+    font-size: 38px;
 }
 
 header input {
-    margin-top: 20px;
+    margin-top: 15px;
     padding: 12px;
     width: 60%;
     border-radius: 10px;
     border: none;
-    font-size: 16px;
 }
 
 .container {
     max-width: 900px;
     margin: auto;
-    padding: 30px;
+    padding: 25px;
 }
 
 .category {
-    margin-top: 40px;
-    font-size: 22px;
+    margin-top: 35px;
+    font-size: 20px;
     border-left: 4px solid #6366f1;
     padding-left: 10px;
 }
 
-.faq-item {
-    background: #1e293b;
-    margin-top: 12px;
-    border-radius: 10px;
-    overflow: hidden;
+.item {
+    background: #111a2e;
+    margin-top: 10px;
+    border-radius: 12px;
 }
 
-.question {
+.q {
     padding: 15px;
     cursor: pointer;
     font-weight: bold;
-    display: flex;
-    justify-content: space-between;
 }
 
-.question:hover {
-    background: #334155;
-}
+.q:hover { background:#1e2a44; }
 
-.answer {
+.a {
     display: none;
     padding: 15px;
+    border-top: 1px solid #22304d;
     color: #cbd5e1;
-    border-top: 1px solid #334155;
 }
 
-.badge {
-    font-size: 12px;
+form {
+    margin-top: 60px;
+    background: #111a2e;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+input, textarea {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: #0b1220;
+    color: white;
+}
+
+button {
+    margin-top: 10px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
     background: #6366f1;
-    padding: 3px 8px;
-    border-radius: 999px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #4f46e5;
 }
 </style>
 </head>
@@ -84,67 +104,86 @@ header input {
 <body>
 
 <header>
-    <h1>📘 FAQ du Serveur</h1>
-    <input id="search" placeholder="Rechercher une question...">
+<h1>📘 FAQ du Serveur</h1>
+<input id="search" placeholder="Rechercher...">
 </header>
+
+<div class="container" id="faq"></div>
 
 <div class="container">
 
-<!-- CATÉGORIE 1 -->
-<div class="category">🔐 Compte</div>
+<h2>❓ Poser une question</h2>
 
-<div class="faq-item">
-<div class="question">Comment accéder au serveur ? <span class="badge">Compte</span></div>
-<div class="answer">Tu dois utiliser ton identifiant fourni par l’admin ou t’inscrire via le système d’invitation.</div>
-</div>
-
-<div class="faq-item">
-<div class="question">J’ai oublié mon mot de passe</div>
-<div class="answer">Contacte l’administrateur pour réinitialiser ton accès.</div>
-</div>
-
-<!-- CATÉGORIE 2 -->
-<div class="category">🖥️ Serveur</div>
-
-<div class="faq-item">
-<div class="question">Le serveur est lent, que faire ?</div>
-<div class="answer">Vérifie ta connexion puis contacte le support si le problème persiste.</div>
-</div>
-
-<div class="faq-item">
-<div class="question">Comment signaler un bug ?</div>
-<div class="answer">Envoie une description précise au support avec capture si possible.</div>
-</div>
-
-<!-- CATÉGORIE 3 -->
-<div class="category">📺 Contenu</div>
-
-<div class="faq-item">
-<div class="question">Comment ajouter un film ?</div>
-<div class="answer">Les uploads sont réservés aux administrateurs du serveur.</div>
-</div>
+<form action="https://formspree.io/f/mdaybojz" method="POST">
+    <input name="question" type="text" placeholder="Ta question" required>
+    <textarea name="details" placeholder="Détails (optionnel)"></textarea>
+    <button type="submit">Envoyer</button>
+</form>
 
 </div>
 
 <script>
-// Accordion
-document.querySelectorAll(".question").forEach(q => {
-    q.addEventListener("click", () => {
-        const ans = q.nextElementSibling;
-        ans.style.display = ans.style.display === "block" ? "none" : "block";
-    });
+
+let data = [];
+
+/* LOAD FAQ */
+fetch("./faq.json")
+.then(r => r.json())
+.then(json => {
+    data = json;
+    render(json);
 });
 
-// Search
-const search = document.getElementById("search");
-search.addEventListener("input", () => {
-    const val = search.value.toLowerCase();
+/* RENDER */
+function render(list) {
+    const container = document.getElementById("faq");
+    container.innerHTML = "";
 
-    document.querySelectorAll(".faq-item").forEach(item => {
-        const text = item.innerText.toLowerCase();
-        item.style.display = text.includes(val) ? "block" : "none";
+    const groups = {};
+
+    list.forEach(i => {
+        if (!groups[i.category]) groups[i.category] = [];
+        groups[i.category].push(i);
     });
+
+    for (let cat in groups) {
+        const title = document.createElement("div");
+        title.className = "category";
+        title.innerText = "📁 " + cat;
+        container.appendChild(title);
+
+        groups[cat].forEach(item => {
+            const div = document.createElement("div");
+            div.className = "item";
+
+            div.innerHTML = `
+                <div class="q">${item.question}</div>
+                <div class="a">${item.answer}</div>
+            `;
+
+            div.querySelector(".q").onclick = () => {
+                const a = div.querySelector(".a");
+                a.style.display = a.style.display === "block" ? "none" : "block";
+            };
+
+            container.appendChild(div);
+        });
+    }
+}
+
+/* SEARCH */
+document.getElementById("search").addEventListener("input", e => {
+    const v = e.target.value.toLowerCase();
+
+    const filtered = data.filter(x =>
+        x.question.toLowerCase().includes(v) ||
+        x.answer.toLowerCase().includes(v) ||
+        x.category.toLowerCase().includes(v)
+    );
+
+    render(filtered);
 });
+
 </script>
 
 </body>
