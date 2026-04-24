@@ -1,13 +1,13 @@
 [
   {
     "category": "Compte",
-    "question": "Comment accéder au serveur ?",
-    "answer": "Utilise ton compte invité ou l’invitation fournie par l’admin."
+    "question": "Comment accÃ©der au serveur ?",
+    "answer": "Utilise ton compte invitÃ© ou lâinvitation fournie par lâadmin."
   },
   {
     "category": "Serveur",
     "question": "Le serveur est lent, que faire ?",
-    "answer": "Vérifie ta connexion ou contacte le support si le problème persiste."
+    "answer": "VÃ©rifie ta connexion ou contacte le support si le problÃ¨me persiste."
   },
   {
     "category": "Contenu",
@@ -17,6 +17,11 @@
   {
     "category": "Utilisateur",
     "question": "je veux le film ocean eleven",
+    "answer": "en attente"
+  },
+  {
+    "category": "Utilisateur",
+    "question": "test",
     "answer": "en attente"
   }
 ]
