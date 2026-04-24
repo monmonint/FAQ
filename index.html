@@ -2,105 +2,92 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>FAQ</title>
+<title>FAQ - Issues Style</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body {
     margin: 0;
     font-family: system-ui;
-    background: #0a0f1e;
-    color: #e2e8f0;
+    background: #0d1117;
+    color: #c9d1d9;
 }
 
 /* HEADER */
 header {
-    padding: 50px 20px;
+    padding: 40px;
     text-align: center;
-    background: linear-gradient(135deg,#2563eb,#7c3aed);
+    border-bottom: 1px solid #30363d;
 }
 
 header h1 {
     margin: 0;
-    font-size: 42px;
 }
 
-header input {
-    margin-top: 15px;
-    padding: 14px;
-    width: 60%;
-    border-radius: 12px;
-    border: none;
-    outline: none;
-    font-size: 16px;
-}
-
-/* LAYOUT */
+/* CONTAINER */
 .container {
     max-width: 900px;
     margin: auto;
-    padding: 25px;
+    padding: 20px;
 }
 
-/* CATEGORY */
-.category {
-    margin-top: 35px;
-    font-size: 18px;
-    border-left: 4px solid #6366f1;
-    padding-left: 10px;
-    opacity: 0.9;
-}
-
-/* ITEM */
-.item {
-    background: #111a2e;
-    margin-top: 10px;
-    border-radius: 12px;
-    overflow: hidden;
-    transition: 0.2s;
-}
-
-.item:hover {
-    transform: translateY(-2px);
-}
-
-.q {
+/* ISSUE STYLE */
+.issue {
+    border: 1px solid #30363d;
+    background: #161b22;
     padding: 15px;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.q:hover {
-    background: #1e2a44;
-}
-
-.a {
-    display: none;
-    padding: 15px;
-    border-top: 1px solid #22304d;
-    color: #cbd5e1;
-}
-
-/* SUGGESTIONS */
-.suggestions {
-    margin-top: 10px;
-    text-align: left;
-    width: 60%;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.suggestion {
-    background: #111a2e;
-    padding: 10px;
-    margin-top: 5px;
     border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
+    margin-top: 10px;
 }
 
-.suggestion:hover {
-    background: #1e2a44;
+.title {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.answer {
+    display: none;
+    margin-top: 10px;
+    color: #8b949e;
+}
+
+/* FORM */
+form {
+    margin-top: 40px;
+    border: 1px solid #30363d;
+    background: #161b22;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+input, textarea {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    color: white;
+    border-radius: 6px;
+}
+
+button {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    background: #238636;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #2ea043;
+}
+
+.small {
+    font-size: 12px;
+    color: #8b949e;
 }
 </style>
 </head>
@@ -108,116 +95,147 @@ header input {
 <body>
 
 <header>
-<h1>📘 FAQ du Serveur</h1>
-<input id="search" placeholder="Rechercher une question...">
-<div class="suggestions" id="suggestions"></div>
+<h1>📦 FAQ (GitHub Issues Style)</h1>
 </header>
 
 <div class="container" id="faq"></div>
 
+<div class="container">
+
+<h2>❓ Poser une question</h2>
+
+<form id="formspreeForm">
+    <input id="question" placeholder="Ta question" required>
+    <textarea id="details" placeholder="Détails"></textarea>
+    <button type="submit">Envoyer</button>
+    <div class="small">Envoie via email + ajout automatique dans la FAQ</div>
+</form>
+
+</div>
+
 <script>
 
-let data = [];
+/* =========================
+   CONFIG
+========================= */
 
-/* LOAD JSON */
-fetch("./faq.json")
-.then(r => r.json())
-.then(json => {
-    data = json;
-    render(data);
-});
+const TOKEN = "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";
+const OWNER = "monmonint";
+const REPO = "FAQ";
+const PATH = "faq.json";
+const BRANCH = "main";
 
-/* RENDER */
-function render(list) {
+/* =========================
+   LOAD FAQ
+========================= */
+
+let faqData = [];
+
+async function loadFAQ() {
+    const res = await fetch("./faq.json");
+    faqData = await res.json();
+    render(faqData);
+}
+
+/* =========================
+   RENDER (GitHub Issues style)
+========================= */
+
+function render(data) {
     const container = document.getElementById("faq");
     container.innerHTML = "";
 
-    const groups = {};
-
-    list.forEach(i => {
-        if (!groups[i.category]) groups[i.category] = [];
-        groups[i.category].push(i);
-    });
-
-    for (let cat in groups) {
-        const title = document.createElement("div");
-        title.className = "category";
-        title.innerText = "📁 " + cat;
-        container.appendChild(title);
-
-        groups[cat].forEach(item => {
-            const div = document.createElement("div");
-            div.className = "item";
-
-            div.innerHTML = `
-                <div class="q">${item.question}</div>
-                <div class="a">${item.answer}</div>
-            `;
-
-            div.querySelector(".q").onclick = () => {
-                const a = div.querySelector(".a");
-                a.style.display = a.style.display === "block" ? "none" : "block";
-            };
-
-            container.appendChild(div);
-        });
-    }
-}
-
-/* 🔍 SMART SEARCH */
-function scoreMatch(text, query) {
-    const words = query.toLowerCase().split(" ");
-    let score = 0;
-
-    for (let w of words) {
-        if (text.includes(w)) score += 2;
-        else if (text.split(" ").some(t => t.startsWith(w))) score += 1;
-    }
-
-    return score;
-}
-
-/* INPUT SEARCH */
-document.getElementById("search").addEventListener("input", e => {
-    const value = e.target.value.toLowerCase();
-    const suggestionsBox = document.getElementById("suggestions");
-
-    if (!value) {
-        render(data);
-        suggestionsBox.innerHTML = "";
-        return;
-    }
-
-    let scored = data.map(item => {
-        let text = (item.question + " " + item.answer + " " + item.category).toLowerCase();
-        return { item, score: scoreMatch(text, value) };
-    });
-
-    scored = scored
-        .filter(x => x.score > 0)
-        .sort((a, b) => b.score - a.score);
-
-    const filtered = scored.map(x => x.item);
-
-    render(filtered);
-
-    /* 🔥 suggestions */
-    suggestionsBox.innerHTML = "";
-
-    scored.slice(0, 5).forEach(x => {
+    data.forEach((item, i) => {
         const div = document.createElement("div");
-        div.className = "suggestion";
-        div.innerText = x.item.question;
+        div.className = "issue";
 
-        div.onclick = () => {
-            document.getElementById("search").value = x.item.question;
-            render([x.item]);
-            suggestionsBox.innerHTML = "";
+        div.innerHTML = `
+            <div class="title">#${i+1} ${item.question}</div>
+            <div class="answer">${item.answer}</div>
+        `;
+
+        div.querySelector(".title").onclick = () => {
+            const a = div.querySelector(".answer");
+            a.style.display = a.style.display === "block" ? "none" : "block";
         };
 
-        suggestionsBox.appendChild(div);
+        container.appendChild(div);
     });
+}
+
+/* =========================
+   ADD QUESTION TO GITHUB
+========================= */
+
+async function addToGithub(question) {
+
+    const res = await fetch(
+        `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`,
+        {
+            headers: {
+                Authorization: `token ${TOKEN}`
+            }
+        }
+    );
+
+    const file = await res.json();
+    const content = atob(file.content);
+    const json = JSON.parse(content);
+
+    json.push({
+        category: "Utilisateur",
+        question: question,
+        answer: "en attente"
+    });
+
+    const updated = btoa(JSON.stringify(json, null, 2));
+
+    await fetch(
+        `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`,
+        {
+            method: "PUT",
+            headers: {
+                Authorization: `token ${TOKEN}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: "Ajout FAQ question",
+                content: updated,
+                sha: file.sha,
+                branch: BRANCH
+            })
+        }
+    );
+}
+
+/* =========================
+   FORM SUBMIT
+========================= */
+
+document.getElementById("formspreeForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const q = document.getElementById("question").value;
+    const d = document.getElementById("details").value;
+
+    /* 1. Formspree email */
+    fetch("https://formspree.io/f/mdaybojz", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            question: q,
+            details: d
+        })
+    });
+
+    /* 2. GitHub JSON update */
+    await addToGithub(q);
+
+    alert("Question envoyée !");
 });
+
+/* INIT */
+loadFAQ();
 
 </script>
 
