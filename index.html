@@ -123,6 +123,27 @@ header p {
     color: #64748b;
 }
 
+.admin-button {
+    position: fixed;
+    left: 24px;
+    bottom: 24px;
+    z-index: 100;
+    background: white;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    width: auto;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.admin-button:hover {
+    background: #f8fafc;
+}
+    
 /* FLOAT BUTTON */
 
 .ask-button {
@@ -413,7 +434,17 @@ async function loadFAQ() {
 /* =========================
 RENDER
 ========================= */
+function goToAdmin() {
+    const password = prompt("Mot de passe admin :");
 
+    const ADMIN_PASSWORD = "monmotdepasse123";
+
+    if (password === ADMIN_PASSWORD) {
+        window.location.href = "admin.html";
+    } else if (password !== null) {
+        alert("Mot de passe incorrect.");
+    }
+}
 function render(data) {
     const pendingContainer = document.getElementById("pendingFaq");
     const answeredContainer = document.getElementById("answeredFaq");
@@ -605,6 +636,9 @@ document.getElementById("questionForm").addEventListener("submit", async (e) => 
 loadFAQ();
 
 </script>
-
+    
+<button class="admin-button" onclick="goToAdmin()">
+    Admin
+</button>
 </body>
 </html>
