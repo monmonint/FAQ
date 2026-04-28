@@ -1,13 +1,13 @@
 [
   {
     "category": "Compte",
-    "question": "Comment accÃÂ©der au serveur ?",
-    "answer": "Utilise ton compte invitÃÂ© ou lÃ¢ÂÂinvitation fournie par lÃ¢ÂÂadmin."
+    "question": "Comment accÃÂÃÂ©der au serveur ?",
+    "answer": "Utilise ton compte invitÃÂÃÂ© ou lÃÂ¢ÃÂÃÂinvitation fournie par lÃÂ¢ÃÂÃÂadmin."
   },
   {
     "category": "Serveur",
     "question": "Le serveur est lent, que faire ?",
-    "answer": "Vérifie ta connexion ou contacte le support si le problème persiste."
+    "answer": "VÃ©rifie ta connexion ou contacte le support si le problÃ¨me persiste."
   },
   {
     "category": "Contenu",
@@ -25,8 +25,8 @@
     "answer": "en attente"
   },
   {
-    "category": "Utilisateur",
+    "category": "Serveur",
     "question": "ajout",
-    "answer": "en attente"
+    "answer": "Allez sur jelysser, si vous n'arrivez pas à y accéder vous pouvez y accéder au 100.69.195.23:5055"
   }
 ]
