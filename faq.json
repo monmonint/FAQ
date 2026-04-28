@@ -1,13 +1,13 @@
 [
   {
     "category": "Compte",
-    "question": "Comment accÃÂÃÂ©der au serveur ?",
-    "answer": "Utilise ton compte invitÃÂÃÂ© ou lÃÂ¢ÃÂÃÂinvitation fournie par lÃÂ¢ÃÂÃÂadmin."
+    "question": "Comment accÃÂÃÂÃÂÃÂ©der au serveur ?",
+    "answer": "Utilise ton compte invitÃÂÃÂÃÂÃÂ© ou lÃÂÃÂ¢ÃÂÃÂÃÂÃÂinvitation fournie par lÃÂÃÂ¢ÃÂÃÂÃÂÃÂadmin."
   },
   {
     "category": "Serveur",
     "question": "Le serveur est lent, que faire ?",
-    "answer": "VÃ©rifie ta connexion ou contacte le support si le problÃ¨me persiste."
+    "answer": "VÃÂ©rifie ta connexion ou contacte le support si le problÃÂ¨me persiste."
   },
   {
     "category": "Contenu",
@@ -17,7 +17,7 @@
   {
     "category": "Utilisateur",
     "question": "je veux le film ocean eleven",
-    "answer": "va sur jellyseer 100.69.195.23:"
+    "answer": "Débrouille toi"
   },
   {
     "category": "Utilisateur",
@@ -27,6 +27,6 @@
   {
     "category": "Serveur",
     "question": "ajout",
-    "answer": "Allez sur jelysser, si vous n'arrivez pas à y accéder vous pouvez y accéder au 100.69.195.23:5055"
+    "answer": "Allez sur jelysser, si vous n'arrivez pas Ã  y accÃ©der vous pouvez y accÃ©der au 100.69.195.23:5055"
   }
 ]
